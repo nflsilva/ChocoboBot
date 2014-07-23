@@ -23,11 +23,10 @@ On eclipse:
 
 On Console:
 
-Still left to do:
-- Automatic acquire the game's window coordinates. At the moment, this is only achievable by trial and error. These coordinates are the base of the program. Having these wrong will lead to wrong screenshots and the program won't identify events. 
+Still left to do: 
 - Conceive a way to input the arrow keys without clicking in the screen keyboard. It seems that is not privial to emulate the "push" button. The program uses an instance of class Robot to simulate inputs.However, the methods doesn't achieve the same result as the screen keyboard, which are the correct ones. 
 - Optimize the input module, so it can send keys to the window without making it active. Doing so, it would be possible to use the program, and still be able to use the computer.
-
+- Optimize the interface.
 
 Extra notes:
 It is not intended to ruin or change the spirit of the game. Players can still enjoy Chocobo World as it is. This project is for curiosity, enjoyment and knowledge purposes only. 
