@@ -4,62 +4,47 @@ import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.Native;
 
 public class Win32WindowUtils {
+	
+	public static int[] GetWindowCoordinates(final String winTitle){
+		final List<WindowInfo> windows = new ArrayList<WindowInfo>();
+		final int[] pos = new int[2];
+	    final List<Integer> order = new ArrayList<Integer>();
+	    int top = User32.instance.GetTopWindow(0);
+	    
+	    while (top!=0) {
+	        order.add(top);
+	        top = User32.instance.GetWindow(top, User32.GW_HWNDNEXT);
+	    }
+	    User32.instance.EnumWindows(new WndEnumProc()
+	    {
+	        public boolean callback(int hWnd, int lParam)
+	        {
+	        if (User32.instance.IsWindowVisible(hWnd)) {
+	            RECT r = new RECT();
+	            User32.instance.GetWindowRect(hWnd, r);
+	            if (r.left>-32000) {     // minimized
+	                byte[] buffer = new byte[1024];
+	                User32.instance.GetWindowTextA(hWnd, buffer, buffer.length);
+	                String title = Native.toString(buffer);
+	                if(title.equals(winTitle)){
+	                	windows.add(new WindowInfo(hWnd, r, title));
+	                	pos[0] = r.left;
+	                	pos[1] = r.top;
+	                }
+	            }
+	        }
+	        return true;
+	    }
+	    }, 0);
 
-	private static final int WIN_TITLE_MAX_SIZE = 512;
-	private static final int NAME_PART = 0;
-
-	public static HWND GetWindowHandle(String strSearch, String strClass) {
-		char[] lpString = new char[WIN_TITLE_MAX_SIZE];
-		String strTitle;
-		int iFind = -1;
-		HWND hWnd = User32.INSTANCE.FindWindow(strClass, null);
-		while(hWnd != null) {
-			User32.INSTANCE.GetWindowText(hWnd, lpString, WIN_TITLE_MAX_SIZE);
-			strTitle = new String(lpString);
-			strTitle = strTitle.toUpperCase();
-			iFind = strTitle.indexOf(strSearch);
-			if(iFind != -1) {
-				return hWnd;
-			}
-			hWnd = User32.INSTANCE.FindWindowEx(null, hWnd, strClass, null);
-		}
-		return hWnd;
+	    return pos;
 	}
-	
-	
-	public static List<String> GetActiveProcessName(){
-		List<String> result = new ArrayList<String>();
-		int n = 2;
-		try {
-			String line;
-			String parts[];
-			Process p = Runtime.getRuntime().exec(System.getenv("windir") +"\\system32\\"+"tasklist.exe");
-			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			while ((line = input.readLine()) != null) {
-				if(n < 0){
-					parts = line.split(" ");
-					//System.out.println(line);
-					result.add(parts[NAME_PART]);
-				}else{
-					n--;
-				}
-			}
-			input.close();
-		} catch (Exception err) {
-			err.printStackTrace();
-		}
-
-		return result;
-	}
-	
 	
 	public static BufferedImage TakePrintScreen(int x, int y, int width, int height){
 		Robot r = null;
@@ -75,5 +60,8 @@ public class Win32WindowUtils {
 		return image;
 	}
 
+	
+	
+	
 
 }

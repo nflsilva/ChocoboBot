@@ -16,6 +16,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 import com.ffviii.utils.ImageManager;
+import com.ffviii.utils.User32;
+import com.ffviii.utils.Win32WindowUtils;
 
 
 public class App {
@@ -30,8 +32,8 @@ public class App {
 	private static int REST_DELAY = 2000;
 	private static int DROP_DELAY = 3000;
 	private static int CICLE_DELAY = 100;
-	
-	
+
+
 	private static int UNDEFINED_IN_BATTLE = 50;
 	private static int TIMES_REPEATING_STATE = 500;
 
@@ -39,7 +41,7 @@ public class App {
 
 	private static String CHOCOBO_PROSS_NAME = "Chocobo_EN";
 	private static String CHOCOBO_WINDOW_TEXT = "Chocobo World";
-	
+
 	private static String DEBUG_IMAGES_DIR = "images//uk//";
 
 
@@ -65,7 +67,7 @@ public class App {
 
 	private static ImageManager imageManager;
 	private static int lastState = -1;
-	
+
 
 	public static void main(String[] args){
 
@@ -123,16 +125,16 @@ public class App {
 		Random generator = new Random(); 
 		int timesRepeatingLastState = generator.nextInt(TIMES_REPEATING_STATE);
 		boolean inEvent = false;
-		
+
 		boolean runningToEvent = true;
-		
+
 
 		while(true){
-	    	Calendar cal = Calendar.getInstance();
-	    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-	    	cal.getTime();
-	    	System.out.println( sdf.format(cal.getTime()) );
-			
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			cal.getTime();
+			System.out.println( sdf.format(cal.getTime()) );
+
 			if(state == lastState){
 				timesRepeatingLastState--;
 				System.out.println("Same as before... " + timesRepeatingLastState);
@@ -148,20 +150,20 @@ public class App {
 						ClickUp(EVENT_CLICK_DELAY);
 					}
 				}
-				
+
 			}else {
 				timesRepeatingLastState = generator.nextInt(TIMES_REPEATING_STATE);
 			}
-			
+
 			lastState = state;
-			
+
 			if(!runningToEvent){
 				int pcoors[] = GetPlayerPos();
 				player_x = pcoors[0];
 				player_y = pcoors[1];
 				map = GetMapMatrix();
-				
-				
+
+
 			}
 
 			BufferedImage image = imageManager.GetSmallScreenImage();
@@ -169,7 +171,7 @@ public class App {
 
 			if(inEvent){
 				System.out.println("In event... " + state);
-				
+
 				if(state == ImageManager.UNDEFINED){
 					imageManager.SaveImageToFile(image, DEBUG_IMAGES_DIR + "404event.bmp", "bmp");
 				}
@@ -190,11 +192,13 @@ public class App {
 					Thread.sleep(5000);
 					image = imageManager.GetAllScreenImage();
 					imageManager.SaveImageToFile(image, DEBUG_IMAGES_DIR + "last_weapon_event.bmp", "bmp");
-					
+
 					while(state > 3){
 						PressKey(KeyEvent.VK_CONTROL);
 						Thread.sleep(1000);
+
 						ClickDown(EVENT_CLICK_DELAY);
+
 						image = imageManager.GetSmallScreenImage();
 						state = imageManager.GetEventFromtImage(image);
 					}
@@ -212,6 +216,8 @@ public class App {
 						while(state > 3){
 							System.out.println("In combat...");
 
+
+							
 							ClickLeft(EVENT_CLICK_DELAY);
 							ClickRight(EVENT_CLICK_DELAY);
 							ClickLeft(EVENT_CLICK_DELAY);
@@ -254,7 +260,7 @@ public class App {
 								e = imageManager.CompareImages(img0, img1);
 								System.out.println(e);
 							}while(!e);
-							
+
 							continue;
 						}
 					}else{
@@ -283,19 +289,23 @@ public class App {
 			}else if( state < ImageManager.WALKING_DOWN+1){
 				if(state == ImageManager.WALKING_DOWN){
 					System.out.println("Walking down");
+					//PressKey(KeyEvent.VK_DOWN);
 					ClickDown(WALK_CLICK_DELAY);
 					continue;
 				}else if(state == ImageManager.WALKING_UP){
 					System.out.println("Walking up");
+					//PressKey(KeyEvent.VK_UP);
 					ClickUp(WALK_CLICK_DELAY);
 					continue;
 				}else if(state == ImageManager.WALKING_LEFT){
 					System.out.println("Walking left");
+					//PressKey(KeyEvent.VK_LEFT);
 					ClickLeft(WALK_CLICK_DELAY);
 					continue;
 				}
 				else if(state == ImageManager.WALKING_RIGHT){
 					System.out.println("Walking right");
+					//PressKey(KeyEvent.VK_RIGHT);
 					ClickRight(WALK_CLICK_DELAY);
 					continue;
 				}
@@ -312,7 +322,7 @@ public class App {
 			Thread.sleep(CICLE_DELAY);
 		}
 	}
-	
+
 	private static int[] GetPlayerPos() throws InterruptedException{
 		int[] pos;
 		BufferedImage[] imgs = new BufferedImage[3];
@@ -320,30 +330,30 @@ public class App {
 		Thread.sleep(50);
 		do{
 
-		BufferedImage image0 = imageManager.GetMapImage();
-		imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_0.bmp", "bmp");
-		imgs[0] = image0;
+			BufferedImage image0 = imageManager.GetMapImage();
+			imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_0.bmp", "bmp");
+			imgs[0] = image0;
 
-		Thread.sleep(200);
+			Thread.sleep(200);
 
-		image0 = imageManager.GetMapImage();
-		imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_1.bmp", "bmp");
-		imgs[1] = image0;
+			image0 = imageManager.GetMapImage();
+			imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_1.bmp", "bmp");
+			imgs[1] = image0;
 
-		Thread.sleep(200);
+			Thread.sleep(200);
 
-		image0 = imageManager.GetMapImage();
-		imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_2.bmp", "bmp");
-		imgs[2] = image0;
+			image0 = imageManager.GetMapImage();
+			imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_2.bmp", "bmp");
+			imgs[2] = image0;
 
-		pos = imageManager.GetPlayerPosition(imgs);
+			pos = imageManager.GetPlayerPosition(imgs);
 		}while(pos[0]>0);
 		System.out.println(pos[0] + " : " + pos[1]);
 		PressKey(KeyEvent.VK_CONTROL);
 		Thread.sleep(50);
 		return pos;
 	}
-	
+
 	private static int[][] GetMapMatrix() throws InterruptedException{
 		int[][] map;
 		PressKey(KeyEvent.VK_CONTROL);
@@ -352,7 +362,7 @@ public class App {
 		PressKey(KeyEvent.VK_CONTROL);
 		return map;
 	}
-	
+
 	private static int FindClosestEvent(){
 		int up, down, left, right;
 		for(int range = 1; range <= 18; ++range){
@@ -360,27 +370,21 @@ public class App {
 			down = player_y + range;
 			left = player_x - range;
 			right = player_x + range;
-			
+
 			//TODO: need to lookup an afficient algoritm for this one
 		}
 		return 0;
 	}
-	
+
 
 	private static void TestEvents() throws InterruptedException{
 		System.out.println("Starting in TestEvents mode...");
 		Initialize();
-		int[][] map = imageManager.GetMapFromImage(imageManager.GetMapImage());
-		for(int i = 0; i < map.length; ++i){
-			for(int j = 0; j < map[i].length; ++j){
-				
-				System.out.print(map[i][j] + " ");
-			}
-			System.out.println(" ");
-		}
+		int[] coords = Win32WindowUtils.GetWindowCoordinates(CHOCOBO_WINDOW_TEXT);
+		System.out.println(coords[0] + ":" + coords[1]);
 
 	}
-	
+
 	private static void TestMapPositionCapture() throws InterruptedException{
 		System.out.println("Map position capture test mode...");
 		while(true){
@@ -445,10 +449,10 @@ public class App {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String patch = "D:\\temp\\" + prefix;
+		String patch = DEBUG_IMAGES_DIR + prefix;
 		BufferedImage image;
 		for(int t = 0; t < num_pics; t++){
-			image = imageManager.GetMapImage();
+			image = imageManager.GetAllScreenImage();
 			imageManager.SaveImageToFile(image, patch + Integer.toString(t) + ".bmp", "bmp");
 			System.out.println(t +  "/" + num_pics);
 			try {
@@ -465,34 +469,31 @@ public class App {
 		System.out.println("Mouse config mode...");
 		System.out.println("Still in dev mode. Come on man, fix me already!");
 		Point p = null;
-		int key = -1;
-		Scanner s = new Scanner(System.in);
-		
+		/*
 		while(key != KeyEvent.VK_U){
 			System.out.println("Please, click button up " + key);
 			key = s.nextInt();
 		}
 		p = MouseInfo.getPointerInfo().getLocation();
 		up_ax = p.x;
-		up_ay = p.y;
-		
-		/*
+		up_ay = p.y;*/
+
+
 		while(true){
-			a = MouseInfo.getPointerInfo().getLocation();
-			System.out.println(a.getX() + " : " + a.getY());
+			p = MouseInfo.getPointerInfo().getLocation();
+			System.out.println(p.getX() + " : " + p.getY());
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 	}
 
 	private static void Initialize() throws InterruptedException{
-		int[] coords = ReadWindowPosition();
-	
-
+		int[] coords = Win32WindowUtils.GetWindowCoordinates(CHOCOBO_WINDOW_TEXT);
+		
 		try {
 			actuator= new Robot();
 		} catch (AWTException e) {
@@ -509,7 +510,7 @@ public class App {
 		imageManager.InitializeImages();
 		System.out.println("Loaded Images...");
 	}
-	
+
 	private static void ClickUp(int holdTime){
 		actuator.mouseMove(up_ax, up_ay);
 		actuator.mousePress(InputEvent.BUTTON1_MASK);
@@ -550,15 +551,6 @@ public class App {
 		return result;
 	}
 
-	private static void HoldKey(int keyCode){
-		try{
-			actuator.keyPress(keyCode);
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
 	private static void ReleaseKey(int keyCode){
 		actuator.keyRelease(keyCode);
 	}
@@ -570,33 +562,25 @@ public class App {
 		ReleaseKey(KeyEvent.VK_DOWN);
 	}
 
-	private static void PressKey(int keyCode){
-
-		try {
-			actuator.keyPress(keyCode);
-			Thread.sleep(100);
-			actuator.keyRelease(keyCode);
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	private static void PressKey(int keyCode) throws InterruptedException{
+		actuator.keyPress(keyCode);
+		Thread.sleep(EVENT_CLICK_DELAY);
+		actuator.keyRelease(keyCode);
+		Thread.sleep(EVENT_CLICK_DELAY);
 	}
 
+	private volatile static boolean isContinue = true;
+	private static void runPress() {
+		System.out.println("Parallel thread");
+		while (isContinue) {
+			actuator.keyPress(KeyEvent.VK_UP);
 
-
-
-
-	/*
-	HWND windowHAndle = null;
-	windowHAndle = Win32WindowUtils.GetWindowHandle(CHOCOBO_WINDOW_TEXT.toUpperCase(), null);
-
-	if(windowHAndle != null) {
-		System.out.println("FOCUS!");
-		System.out.println(User32.INSTANCE.ShowWindow(windowHAndle, User32.SW_SHOWDEFAULT));
-		System.out.println(User32.INSTANCE.SetFocus(windowHAndle));
-	}*/
+		}
+		actuator.keyRelease(KeyEvent.VK_UP);
+	}
+	private static void stopPress() {
+		isContinue = false;
+	}
 
 
 }

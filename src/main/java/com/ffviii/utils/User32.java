@@ -1,9 +1,7 @@
 package com.ffviii.utils;
 
 import com.sun.jna.Native;
-import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.win32.StdCallLibrary;
-import com.sun.jna.win32.W32APIOptions;
 
 public interface User32 extends StdCallLibrary {
 	
@@ -22,17 +20,19 @@ public interface User32 extends StdCallLibrary {
 	static int SW_SHOWNORMAL = 1;
 	
 	
-	User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class, W32APIOptions.DEFAULT_OPTIONS);
-	
-	HWND GetParent(HWND hWnd);
-	
-	HWND FindWindow(String lpClassName, String lpWindowName);
-	
-	HWND SetFocus(HWND hWnd);
-	
-	boolean ShowWindow(HWND hWnd, int nCmdShow);
-	
-	HWND FindWindowEx(HWND hwndParent, HWND hwndChildAfter, String lpszClass, String lpszWindow);
-	
-	int GetWindowText(HWND hWnd, char[] lpString, int nMaxCount);
+    final User32 instance = (User32) Native.loadLibrary ("user32", User32.class);
+    
+    boolean EnumWindows (WndEnumProc wndenumproc, int lParam);
+    
+    boolean IsWindowVisible(int hWnd);
+    
+    int GetWindowRect(int hWnd, RECT r);
+    
+    void GetWindowTextA(int hWnd, byte[] buffer, int buflen);
+    
+    int GetTopWindow(int hWnd);
+    
+    int GetWindow(int hWnd, int flag);
+    
+    final int GW_HWNDNEXT = 2;
 }
