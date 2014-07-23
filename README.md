@@ -3,9 +3,9 @@ ChocoboBot
 
 A very basic computer program that is capable of identifying Chocobo World in-game events and act in response. 
 
-This program identifies events using taking screenshots of the game.
-After that, it compares the screen image with the frames in folder "images", identifies which event is taking place. 
-Last, with this, the bot finds the adequate actions for the event and acts with them.
+This program identifies events using screenshots from the game.
+After that, it compares the screen image with the frames in folder "images", identifing which event is taking place. 
+Finaly, with this, the bot finds the adequate action for the event and acts with it.
 
 Good points:
 The program works without problems. It's possible to leave it running when the computer is inactive and wont need supervision.
