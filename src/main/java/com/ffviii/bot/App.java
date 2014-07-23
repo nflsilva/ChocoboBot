@@ -39,6 +39,8 @@ public class App {
 
 	private static String CHOCOBO_PROSS_NAME = "Chocobo_EN";
 	private static String CHOCOBO_WINDOW_TEXT = "Chocobo World";
+	
+	private static String DEBUG_IMAGES_DIR = "images//uk//";
 
 
 	private static Robot actuator;
@@ -72,8 +74,7 @@ public class App {
 		try {
 			mode = br.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 		if(mode.equals("C")){
@@ -85,8 +86,7 @@ public class App {
 			try {
 				TestEvents();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 
 		}else if(mode.equals("M")){
@@ -97,8 +97,7 @@ public class App {
 			try {
 				InitializeNormalMode();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		}
 
@@ -170,8 +169,9 @@ public class App {
 
 			if(inEvent){
 				System.out.println("In event... " + state);
+				
 				if(state == ImageManager.UNDEFINED){
-					imageManager.SaveImageToFile(image, "D:\\temp\\404event.bmp", "bmp");
+					imageManager.SaveImageToFile(image, DEBUG_IMAGES_DIR + "404event.bmp", "bmp");
 				}
 
 				if(state == ImageManager.DROP_EVENT){//test for drop event
@@ -189,7 +189,7 @@ public class App {
 					System.out.println("Wepon event");
 					Thread.sleep(5000);
 					image = imageManager.GetAllScreenImage();
-					imageManager.SaveImageToFile(image, "D:\\temp\\last_weapon_event.bmp", "bmp");
+					imageManager.SaveImageToFile(image, DEBUG_IMAGES_DIR + "last_weapon_event.bmp", "bmp");
 					
 					while(state > 3){
 						PressKey(KeyEvent.VK_CONTROL);
@@ -204,7 +204,7 @@ public class App {
 					System.out.println("Is it a fight event?");
 					image = imageManager.GetMapImage();
 					state = imageManager.GetEventFromtImage(image);
-					imageManager.SaveImageToFile(image, "D:\\temp\\fightEvent.bmp", "bmp");
+					imageManager.SaveImageToFile(image, DEBUG_IMAGES_DIR + "fightEvent.bmp", "bmp");
 
 					if(state == ImageManager.FIGHT_EVENT){
 						System.out.println("Fight event");
@@ -232,7 +232,7 @@ public class App {
 								break;
 
 							}else{
-								//imageManager.SaveImageToFile(image, "D:\\temp\\uk\\uk_"+ Integer.toString(unknownImageID)+ ".bmp", "bmp");
+								//imageManager.SaveImageToFile(image, DEBUG_IMAGES_DIR + "uk_"+ Integer.toString(unknownImageID)+ ".bmp", "bmp");
 								unknownImageID++;
 								timesIn404++;
 								System.out.println("In combat... 404's:"  + timesIn404);
@@ -248,8 +248,8 @@ public class App {
 							do{
 								img0 = imageManager.GetCurHPImage();
 								img1 = imageManager.GetMaxHPImage();
-								imageManager.SaveImageToFile(img0, "D:\\temp\\cur.bmp", "bmp");
-								imageManager.SaveImageToFile(img1, "D:\\temp\\max.bmp", "bmp");
+								imageManager.SaveImageToFile(img0, DEBUG_IMAGES_DIR + "cur.bmp", "bmp");
+								imageManager.SaveImageToFile(img1, DEBUG_IMAGES_DIR + "max.bmp", "bmp");
 								Thread.sleep(REST_DELAY);
 								e = imageManager.CompareImages(img0, img1);
 								System.out.println(e);
@@ -321,19 +321,19 @@ public class App {
 		do{
 
 		BufferedImage image0 = imageManager.GetMapImage();
-		imageManager.SaveImageToFile(image0, "D:\\temp\\map_0.bmp", "bmp");
+		imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_0.bmp", "bmp");
 		imgs[0] = image0;
 
 		Thread.sleep(200);
 
 		image0 = imageManager.GetMapImage();
-		imageManager.SaveImageToFile(image0, "D:\\temp\\map_1.bmp", "bmp");
+		imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_1.bmp", "bmp");
 		imgs[1] = image0;
 
 		Thread.sleep(200);
 
 		image0 = imageManager.GetMapImage();
-		imageManager.SaveImageToFile(image0, "D:\\temp\\map_2.bmp", "bmp");
+		imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_2.bmp", "bmp");
 		imgs[2] = image0;
 
 		pos = imageManager.GetPlayerPosition(imgs);
@@ -389,19 +389,19 @@ public class App {
 			Thread.sleep(50);
 
 			BufferedImage image0 = imageManager.GetMapImage();
-			imageManager.SaveImageToFile(image0, "D:\\temp\\map_0.bmp", "bmp");
+			imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_0.bmp", "bmp");
 			imgs[0] = image0;
 
 			Thread.sleep(200);
 
 			image0 = imageManager.GetMapImage();
-			imageManager.SaveImageToFile(image0, "D:\\temp\\map_1.bmp", "bmp");
+			imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_1.bmp", "bmp");
 			imgs[1] = image0;
 
 			Thread.sleep(200);
 
 			image0 = imageManager.GetMapImage();
-			imageManager.SaveImageToFile(image0, "D:\\temp\\map_2.bmp", "bmp");
+			imageManager.SaveImageToFile(image0, DEBUG_IMAGES_DIR + "map_2.bmp", "bmp");
 			imgs[2] = image0;
 
 			int[] pos = imageManager.GetPlayerPosition(imgs);
@@ -541,8 +541,7 @@ public class App {
 		try {
 			line = br.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		String parts[] = line.split("X");
 		int[] result = new int[2];
@@ -556,8 +555,7 @@ public class App {
 			actuator.keyPress(keyCode);
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

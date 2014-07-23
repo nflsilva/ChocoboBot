@@ -1,9 +1,6 @@
 package com.ffviii.utils;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.IndexColorModel;
 import java.io.File;
 import java.io.IOException;
 
@@ -50,7 +47,6 @@ public class ImageManager {
     private static final int NUM_WI_FRAMES = 7;			//win event
     
     private static final String IMAGES_MASTER_PATH = "images\\";
-    //private static final String IMAGES_MASTER_PATH = "D:\\temp\\";
     
     private static final String R_FILE_PATH = IMAGES_MASTER_PATH + "right\\right_";
     private BufferedImage r_imgs[];
